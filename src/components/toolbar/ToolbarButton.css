@@ -1,3 +1,6 @@
 .toolbar-button {
-  padding: 3px;
+  display: grid;
+  place-content: center;
+  width: 30px;
+  height: 30px;
 }

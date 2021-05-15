@@ -1,11 +1,19 @@
 .toolbar-container {
   position: fixed;
-  top: 5px;
-  right: 5px;
+  top: 12px;
+  right: 12px;
   display: flex;
   flex-direction: column;
   z-index: 1000;
   background-color: white;
-  border: 1px solid lightslategray;
   border-radius: 4px;
+  box-shadow: 0px 0px 5px;
+}
+
+.toolbar-container > .toolbar-button {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.toolbar-container > .toolbar-button:last-child {
+  border-bottom: none;
 }
