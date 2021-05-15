@@ -1,9 +1,11 @@
-import Map from "./components/Map";
+import Map from "./components/map/Map";
+import Toolbar from "./components/toolbar/Toolbar";
 
 const App = () => {
   return (
     <div className="App">
       <Map />
+      <Toolbar />
     </div>
   );
 };
