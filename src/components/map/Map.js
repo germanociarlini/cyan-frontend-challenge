@@ -1,18 +1,16 @@
-import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
+import { useState } from "react";
+import { MapContainer, TileLayer } from "react-leaflet";
+import FeatureLayer from "./FeatureLayer";
 import "./Map.css";
 
 const Map = (props) => {
   const refPosition = [-3.731862, -38.526669];
   const { activeControl } = props;
 
-  const EventLayer = () => {
-    useMapEvents({
-      click(e) {
-        console.log(`Treating map click ${e.latlng} for control ${activeControl}`);
-      },
-    });
+  const [features, setFeatures] = useState([]);
 
-    return <div></div>;
+  const addFeatureHandler = (feature) => {
+    setFeatures([...features, feature]);
   };
 
   return (
@@ -21,7 +19,11 @@ const Map = (props) => {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <EventLayer />
+      <FeatureLayer
+        onAddFeature={addFeatureHandler}
+        activeControl={activeControl}
+      />
+      {features}
     </MapContainer>
   );
 };
