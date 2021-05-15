@@ -1,7 +1,7 @@
 .toolbar-container {
   position: fixed;
   top: 12px;
-  right: 12px;
+  left: 12px;
   display: flex;
   flex-direction: column;
   z-index: 1000;

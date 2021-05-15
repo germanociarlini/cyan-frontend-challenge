@@ -3,27 +3,26 @@ import Map from "./components/map/Map";
 import Toolbar from "./components/toolbar/Toolbar";
 
 const App = () => {
-  // NONE, POINT, LINESTRING, POLYGON
-  const [activeControl, setActiveControl] = useState("NONE");
+  const [features, setFeatures] = useState([]);
+
+  const updateFeaturesHandler = (updatedFeatures) => {
+    setFeatures(updatedFeatures);
+  };
 
   const save = () => {
     // To do...
-    console.log("Saving...");
-  }
+    console.log(`Saving...`, features);
+  };
 
   const load = () => {
     // To do...
-    console.log("Loading...");
-  }
-
-  const changeControl = (control) => {
-    setActiveControl(control);
+    console.log(`Loading...`, features);
   };
 
   return (
     <div className="App">
-      <Map activeControl={activeControl} />
-      <Toolbar onSave={save} onLoad={load} onChangeControl={changeControl}/>
+      <Map features={features} onUpdateFeatures={updateFeaturesHandler} />
+      <Toolbar onSave={save} onLoad={load} />
     </div>
   );
 };

@@ -6,7 +6,7 @@ const ToolbarButton = (props) => {
 
   const onClickHandler = () => {
     onClick();
-  }
+  };
 
   return (
     <div className="toolbar-button" onClick={onClickHandler}>
