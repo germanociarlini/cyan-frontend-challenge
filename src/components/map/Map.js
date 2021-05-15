@@ -9,24 +9,33 @@ import "./Map.css";
 
 const Map = (props) => {
   const refPosition = [-3.731862, -38.526669];
-  const { features, onUpdateFeatures } = props;
+  const { createFeature, editFeature, deleteFeature } = props;
 
   const onCreateHandler = (e) => {
-    console.log(e);
-    const { _leaflet_id, _latlngs, options } = e.layer;
-    const updatedFeatures = [
-      ...features,
-      { id: _leaflet_id, coordinates: _latlngs[0], color: options.color },
-    ];
-    onUpdateFeatures(updatedFeatures);
+    const { _leaflet_id, options } = e.layer;
+    const newFeature = {
+      id: _leaflet_id,
+      coordinates: e.layer.getLatLngs()[0],
+      color: options.color,
+    };
+    createFeature(newFeature);
   };
 
   const onEditHandler = (e) => {
-    console.log(e);
+    const editedFeatures = Object.values(e.layers._layers);
+    editFeature(editedFeatures);
   };
 
   const onDeleteHandler = (e) => {
-    console.log(e);
+    const deletedFeatures = Object.values(e.layers._layers);
+    deleteFeature(deletedFeatures);
+    // console.log(e);
+    // const { layers: { _layers } } = e;
+    // const updatedFeatures = [...features];
+    // Object.values(_layers).map(({_leaflet_id}) => {
+    //   updatedFeatures.filter((feature) => feature.id !== _leaflet_id);
+    // });
+    // onUpdateFeatures(updatedFeatures);
   };
 
   return (

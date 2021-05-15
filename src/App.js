@@ -5,23 +5,33 @@ import Toolbar from "./components/toolbar/Toolbar";
 const App = () => {
   const [features, setFeatures] = useState([]);
 
-  const updateFeaturesHandler = (updatedFeatures) => {
-    setFeatures(updatedFeatures);
+  const createFeatureHandler = (newFeature) => {
+    setFeatures((previousFeatures) => [...previousFeatures, newFeature]);
+  };
+
+  const editFeatureHandler = (editedFeatures) => {
+    console.log(editedFeatures);
+  };
+
+  const deleteFeatureHandler = (deletedFeatures) => {
+    console.log(deletedFeatures);
   };
 
   const save = () => {
-    // To do...
     console.log(`Saving...`, features);
   };
 
   const load = () => {
-    // To do...
     console.log(`Loading...`, features);
   };
 
   return (
     <div className="App">
-      <Map features={features} onUpdateFeatures={updateFeaturesHandler} />
+      <Map
+        createFeature={createFeatureHandler}
+        editFeature={editFeatureHandler}
+        deleteFeature={deleteFeatureHandler}
+      />
       <Toolbar onSave={save} onLoad={load} />
     </div>
   );
