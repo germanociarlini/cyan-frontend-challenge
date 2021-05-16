@@ -12,21 +12,18 @@ const Map = (props) => {
   const { createFeature, editFeature, deleteFeature } = props;
 
   const onCreateHandler = (e) => {
-    const { _leaflet_id, options } = e.layer;
     const newFeature = {
-      id: _leaflet_id,
-      coordinates: e.layer.getLatLngs()[0],
-      color: options.color,
+      id: e.layer._leaflet_id,
+      feature: e.layer.toGeoJSON()
     };
     createFeature(newFeature);
   };
 
   const onEditHandler = (e) => {
-    const editedFeatures = Object.values(e.layers._layers).map((feature) => {
+    const editedFeatures = Object.values(e.layers._layers).map((layer) => {
       return {
-        id: feature._leaflet_id,
-        coordinates: feature.getLatLngs()[0],
-        color: feature.options.color,
+        id: layer._leaflet_id,
+        feature: layer.toGeoJSON()
       };
     });
     editFeature(editedFeatures);
