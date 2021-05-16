@@ -1,6 +1,7 @@
 import { faFolderOpen, faSave } from "@fortawesome/free-solid-svg-icons";
 import "./Toolbar.css";
 import ToolbarButton from "./ToolbarButton";
+import testGeoJson from "../../test.json";
 
 const Toolbar = (props) => {
   const { onSave, onLoad } = props;
@@ -10,7 +11,8 @@ const Toolbar = (props) => {
   };
 
   const onLoadHandler = () => {
-    onLoad();
+    // Open modal
+    onLoad(testGeoJson);
   };
 
   return (

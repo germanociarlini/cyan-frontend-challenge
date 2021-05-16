@@ -1,60 +1,94 @@
-import {
-  FeatureGroup,
-  MapContainer,
-  TileLayer,
-  ZoomControl
-} from "react-leaflet";
-import { EditControl } from "react-leaflet-draw";
+import L from "leaflet";
+import { useState } from "react";
+import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
+import Toolbar from "../toolbar/Toolbar";
+import DrawFeatureGroup from "./DrawFeatureGroup";
 import "./Map.css";
 
-const Map = (props) => {
-  const refPosition = [-3.731862, -38.526669];
-  const { createFeature, editFeature, deleteFeature } = props;
+const Map = () => {
+  const initialPosition = [-3.731862, -38.526669];
+  const [features, setFeatures] = useState([]);
+  const [editableFeatureGroup, setEditableFeatureGroup] = useState(null);
 
-  const onCreateHandler = (e) => {
-    const newFeature = {
-      id: e.layer._leaflet_id,
-      feature: e.layer.toGeoJSON()
-    };
-    createFeature(newFeature);
+  //#region Toolbar Handlers
+  const onSaveHandler = () => {
+    // Save to DB
+    // Open modal?
+    // const featureCollection = features.map(...)
+
+    console.log("Saving...", features);
   };
 
-  const onEditHandler = (e) => {
-    const editedFeatures = Object.values(e.layers._layers).map((layer) => {
-      return {
+  const onLoadHandler = (geojson) => {
+    onClearHandler();
+
+    const leafletGeoJSON = new L.GeoJSON(geojson);
+    const leafletFG = editableFeatureGroup;
+
+    leafletGeoJSON.eachLayer((layer) => {
+      leafletFG.addLayer(layer);
+      onCreateHandler({
         id: layer._leaflet_id,
-        feature: layer.toGeoJSON()
-      };
+        feature: layer.toGeoJSON(),
+      });
     });
-    editFeature(editedFeatures);
   };
 
-  const onDeleteHandler = (e) => {
-    const deletedFeaturesIds = Object.keys(e.layers._layers);
-    deleteFeature(deletedFeaturesIds);
+  const onClearHandler = () => {
+    editableFeatureGroup.clearLayers();
+    setFeatures([]);
   };
+  //#endregion
+
+  //#region Draw Event Handlers
+  const onUpdateFeatureGroupHandler = (featureGroup) => {
+    setEditableFeatureGroup(featureGroup);
+  };
+
+  const onCreateHandler = (newFeature) => {
+    setFeatures((previousFeatures) => [...previousFeatures, newFeature]);
+  };
+
+  const onEditHandler = (editedFeatures) => {
+    setFeatures((previousFeatures) =>
+      previousFeatures.map((original) => {
+        const edited = editedFeatures.find((ef) => ef.id === original.id);
+        return edited ? { ...edited } : { ...original };
+      })
+    );
+  };
+
+  const onDeleteHandler = (deletedFeaturesIds) => {
+    setFeatures((previousFeatures) =>
+      previousFeatures.filter(
+        (feature) =>
+          !deletedFeaturesIds.some((deletedId) => +deletedId === feature.id)
+      )
+    );
+  };
+  //#endregion
 
   return (
-    <MapContainer center={refPosition} zoom={12} zoomControl={false}>
-      <TileLayer
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    <>
+      <Toolbar
+        onSave={onSaveHandler}
+        onLoad={onLoadHandler}
+        onClear={onClearHandler}
       />
-      <ZoomControl position="bottomleft" />
-      <FeatureGroup>
-        <EditControl
-          position="topright"
-          onCreated={onCreateHandler}
-          onEdited={onEditHandler}
-          onDeleted={onDeleteHandler}
-          draw={{
-            circlemarker: false,
-            marker: false,
-            circle: false,
-          }}
+      <MapContainer center={initialPosition} zoom={12} zoomControl={false}>
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-      </FeatureGroup>
-    </MapContainer>
+        <ZoomControl position="bottomleft" />
+        <DrawFeatureGroup
+          onUpdateFeatureGroup={onUpdateFeatureGroupHandler}
+          onCreate={onCreateHandler}
+          onEdit={onEditHandler}
+          onDelete={onDeleteHandler}
+        />
+      </MapContainer>
+    </>
   );
 };
 
