@@ -2,7 +2,7 @@ import {
   FeatureGroup,
   MapContainer,
   TileLayer,
-  ZoomControl,
+  ZoomControl
 } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import "./Map.css";
@@ -22,7 +22,13 @@ const Map = (props) => {
   };
 
   const onEditHandler = (e) => {
-    const editedFeatures = Object.values(e.layers._layers);
+    const editedFeatures = Object.values(e.layers._layers).map((feature) => {
+      return {
+        id: feature._leaflet_id,
+        coordinates: feature.getLatLngs()[0],
+        color: feature.options.color,
+      };
+    });
     editFeature(editedFeatures);
   };
 
@@ -47,7 +53,7 @@ const Map = (props) => {
           draw={{
             circlemarker: false,
             marker: false,
-            circle: false
+            circle: false,
           }}
         />
       </FeatureGroup>

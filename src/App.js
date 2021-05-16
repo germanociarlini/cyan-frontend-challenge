@@ -10,13 +10,19 @@ const App = () => {
   };
 
   const editFeatureHandler = (editedFeatures) => {
-    console.log(editedFeatures);
+    setFeatures((previousFeatures) =>
+      previousFeatures.map((original) => {
+        const edited = editedFeatures.find((ef) => ef.id === original.id);
+        return (edited) ? {...edited} : {...original};
+      })
+    );
   };
 
   const deleteFeatureHandler = (deletedFeatures) => {
     setFeatures((previousFeatures) =>
-      previousFeatures.filter((feature) =>
-        !deletedFeatures.some((deletedId) => +deletedId === feature.id)
+      previousFeatures.filter(
+        (feature) =>
+          !deletedFeatures.some((deletedId) => +deletedId === feature.id)
       )
     );
   };
