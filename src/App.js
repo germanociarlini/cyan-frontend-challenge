@@ -14,7 +14,11 @@ const App = () => {
   };
 
   const deleteFeatureHandler = (deletedFeatures) => {
-    console.log(deletedFeatures);
+    setFeatures((previousFeatures) =>
+      previousFeatures.filter((feature) =>
+        !deletedFeatures.some((deletedId) => +deletedId === feature.id)
+      )
+    );
   };
 
   const save = () => {

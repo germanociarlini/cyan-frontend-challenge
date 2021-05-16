@@ -27,15 +27,8 @@ const Map = (props) => {
   };
 
   const onDeleteHandler = (e) => {
-    const deletedFeatures = Object.values(e.layers._layers);
-    deleteFeature(deletedFeatures);
-    // console.log(e);
-    // const { layers: { _layers } } = e;
-    // const updatedFeatures = [...features];
-    // Object.values(_layers).map(({_leaflet_id}) => {
-    //   updatedFeatures.filter((feature) => feature.id !== _leaflet_id);
-    // });
-    // onUpdateFeatures(updatedFeatures);
+    const deletedFeaturesIds = Object.keys(e.layers._layers);
+    deleteFeature(deletedFeaturesIds);
   };
 
   return (
@@ -54,6 +47,7 @@ const Map = (props) => {
           draw={{
             circlemarker: false,
             marker: false,
+            circle: false
           }}
         />
       </FeatureGroup>
