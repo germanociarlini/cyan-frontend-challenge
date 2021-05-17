@@ -32,7 +32,14 @@ const Toolbar = (props) => {
   const onLoadClickHandler = async () => {
     _onModalOpen();
     const featureCollections = await api.get("/collections");
-    setCollections(featureCollections.data);
+    setCollections(
+      featureCollections.data.map((collection) => {
+        return {
+          ...collection,
+          updatedAt: new Date(collection.updatedAt.replace(" ", "T")),
+        };
+      })
+    );
   };
 
   const onCollectionItemSelected = (collection) => {
@@ -70,27 +77,32 @@ const Toolbar = (props) => {
         onRequestClose={_onModalClose}
         style={{ overlay: { zIndex: 1001 }, content: { zIndex: 1001 } }} // compensate for leaflet z-index
       >
-        <h2>Load Feature Collection</h2>
-        {collections.map((collection) => {
-          return (
-            <p
-              className={`modal__collection-item ${
-                collection === selectedCollection ? "selected" : ""
-              }`}
-              key={collection.id}
-              onClick={() => onCollectionItemSelected(collection)}
-            >
-              {collection.name}
-            </p>
-          );
-        })}
-        <button
-          className="modal__select-button"
-          onClick={onLoadHandler}
-          disabled={selectedCollection === null}
-        >
-          Load Collection
-        </button>
+        <header className="modal__header">
+          <h2>Load Feature Collection</h2>
+          <button
+            className="modal__select-button"
+            onClick={onLoadHandler}
+            disabled={selectedCollection === null}
+          >
+            Load Collection
+          </button>
+        </header>
+        <main>
+          {collections.map((collection) => {
+            return (
+              <div
+                className={`modal__collection-item ${
+                  collection === selectedCollection ? "selected" : ""
+                }`}
+                onClick={() => onCollectionItemSelected(collection)}
+                key={collection.id}
+              >
+                <span>{collection.name}</span>
+                <span>{collection.updatedAt.toLocaleString("default")}</span>
+              </div>
+            );
+          })}
+        </main>
       </Modal>
     </div>
   );
