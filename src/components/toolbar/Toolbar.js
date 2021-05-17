@@ -1,7 +1,7 @@
 import { faFolderOpen, faSave } from "@fortawesome/free-solid-svg-icons";
 import "./Toolbar.css";
 import ToolbarButton from "./ToolbarButton";
-import testGeoJson from "../../test.json";
+import api from '../../services/api';
 
 const Toolbar = (props) => {
   const { onSave, onLoad } = props;
@@ -10,9 +10,11 @@ const Toolbar = (props) => {
     onSave();
   };
 
-  const onLoadHandler = () => {
-    // Open modal
-    onLoad(testGeoJson);
+  const onLoadHandler = async () => {
+    const featureCollections = await api.get('/collections');
+    console.log(featureCollections);
+    
+    // Open modal with "props" featureCollections, onLoad
   };
 
   return (
