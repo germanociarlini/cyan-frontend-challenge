@@ -8,11 +8,3 @@
 .toolbar-button:hover {
   background-color: lightgrey;
 }
-
-@media screen and (max-width: 600px) {
-  .toolbar-button {
-    width: 45px;
-    height: 45px;
-    font-size: 1.2rem;
-  }
-}
