@@ -2,24 +2,44 @@ import { faFolderOpen, faSave } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import Modal from "react-modal";
 import api from "../../services/api";
-import LoadModal from "../modal/LoadModal";
+import LoadModalContent from "../modal/LoadModalContent";
+import SaveModalContent from "../modal/SaveModalContent";
 import "./Toolbar.css";
 import ToolbarButton from "./ToolbarButton";
 
 Modal.setAppElement(document.getElementById("root"));
 
 const Toolbar = (props) => {
-  const { onSave, onLoad } = props;
+  const { loadedCollection, features, onSave, onLoad } = props;
   const [activeModal, setActiveModal] = useState(null);
   const [collections, setCollections] = useState([]);
 
-  const onSaveHandler = () => {
-    onSetActiveModalHandler("save-modal");
-    onSave();
-  };
-
   const onSetActiveModalHandler = (modal) => {
     setActiveModal(modal);
+  };
+
+  const onSaveClickHandler = () => {
+    onSetActiveModalHandler("save-modal");
+  };
+
+  const onSaveHandler = async (saveName, isSaveAs) => {
+    const upsertCollection = async (shouldCreateNewCollection) => {
+      const endpoint = shouldCreateNewCollection
+        ? "/collections"
+        : `/collections/${loadedCollection.id}`;
+      const collection = await api.put(endpoint, { name: saveName });
+      return collection.data;
+    };
+
+    const collectionToSave = await upsertCollection(isSaveAs || !loadedCollection);
+
+    await api.put(
+      `/collections/${collectionToSave.id}/features`,
+      features.map((feature) => feature.feature)
+    );
+
+    onSetActiveModalHandler(null);
+    onSave(collectionToSave);
   };
 
   const onLoadClickHandler = async () => {
@@ -35,9 +55,9 @@ const Toolbar = (props) => {
     );
   };
 
-  const onLoadHandler = async (selectedCollection) => {
+  const onLoadHandler = async (loadedCollection) => {
     const collectionFeatures = await api.get(
-      `/collections/${selectedCollection.id}/features`
+      `/collections/${loadedCollection.id}/features`
     );
     const validGeoJson = {
       type: "FeatureCollection",
@@ -52,19 +72,29 @@ const Toolbar = (props) => {
       }),
     };
     onSetActiveModalHandler(null);
-    onLoad(validGeoJson);
+    onLoad(loadedCollection, validGeoJson);
   };
 
   return (
     <div className="toolbar-container">
-      <ToolbarButton icon={faSave} onClick={onSaveHandler} />
+      <ToolbarButton icon={faSave} onClick={onSaveClickHandler} />
       <ToolbarButton icon={faFolderOpen} onClick={onLoadClickHandler} />
+      <Modal
+        isOpen={activeModal === "save-modal"}
+        onRequestClose={() => onSetActiveModalHandler(null)}
+        style={{ overlay: { zIndex: 1001 }, content: { zIndex: 1001 } }} // compensate for leaflet z-index
+      >
+        <SaveModalContent
+          loadedCollection={loadedCollection}
+          onSave={onSaveHandler}
+        />
+      </Modal>
       <Modal
         isOpen={activeModal === "load-modal"}
         onRequestClose={() => onSetActiveModalHandler(null)}
         style={{ overlay: { zIndex: 1001 }, content: { zIndex: 1001 } }} // compensate for leaflet z-index
       >
-        <LoadModal collections={collections} onLoad={onLoadHandler} />
+        <LoadModalContent collections={collections} onLoad={onLoadHandler} />
       </Modal>
     </div>
   );

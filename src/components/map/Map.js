@@ -7,22 +7,19 @@ import "./Map.css";
 
 const Map = () => {
   const initialPosition = [-3.731862, -38.526669];
+  const [loadedCollection, setLoadedCollection] = useState(null);
   const [features, setFeatures] = useState([]);
   const [editableFeatureGroup, setEditableFeatureGroup] = useState(null);
 
   //#region Toolbar Handlers
-  const onSaveHandler = () => {
-    // Save to DB
-    // Open modal?
-    // const featureCollection = features.map(...)
+    const onSaveHandler = async (collection) => {
+      setLoadedCollection(collection);
+    };
 
-    console.log("Saving...", features);
-  };
-
-  const onLoadHandler = (geojson) => {
+  const onLoadHandler = (loadedCollection, geoJson) => {
     onClearHandler();
 
-    const leafletGeoJSON = new L.GeoJSON(geojson);
+    const leafletGeoJSON = new L.GeoJSON(geoJson);
     const leafletFG = editableFeatureGroup;
 
     leafletGeoJSON.eachLayer((layer) => {
@@ -32,6 +29,8 @@ const Map = () => {
         feature: layer.toGeoJSON(),
       });
     });
+
+    setLoadedCollection(loadedCollection);
   };
 
   const onClearHandler = () => {
@@ -71,6 +70,8 @@ const Map = () => {
   return (
     <>
       <Toolbar
+        loadedCollection={loadedCollection}
+        features={features}
         onSave={onSaveHandler}
         onLoad={onLoadHandler}
         onClear={onClearHandler}

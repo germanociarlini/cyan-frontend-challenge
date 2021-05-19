@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./LoadModal.css";
+import "./LoadModalContent.css";
 
 const LoadModal = (props) => {
   const { collections, onLoad } = props;
