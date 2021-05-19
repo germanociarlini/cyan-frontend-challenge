@@ -54,6 +54,13 @@ const Map = () => {
     );
   };
 
+  const onChangeFeatureColorHandler = (changedFeature, color) => {
+    const layer = features.find((feature) => feature.id === changedFeature._leaflet_id);
+    if (layer) {
+      layer.feature.properties["color"] = color;
+    }
+  };
+
   const onDeleteHandler = (deletedFeaturesIds) => {
     setFeatures((previousFeatures) =>
       previousFeatures.filter((feature) => !deletedFeaturesIds.some((deletedId) => +deletedId === feature.id))
@@ -79,6 +86,7 @@ const Map = () => {
           onUpdateFeatureGroup={onUpdateFeatureGroupHandler}
           onCreate={onCreateHandler}
           onEdit={onEditHandler}
+          onChangeFeatureColor={onChangeFeatureColorHandler}
           onDelete={onDeleteHandler}
         />
       </MapContainer>

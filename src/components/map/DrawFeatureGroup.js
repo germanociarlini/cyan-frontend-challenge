@@ -5,9 +5,9 @@ import { EditControl } from "react-leaflet-draw";
 
 const DrawFeatureGroup = (props) => {
   const [selectedFeature, setSelectedFeature] = useState(null);
-  const [selectedColor, setSelectedColor] = useState("#fff");
+  const [selectedColor, setSelectedColor] = useState("#000");
 
-  const { onUpdateFeatureGroup, onCreate, onEdit, onDelete } = props;
+  const { onUpdateFeatureGroup, onCreate, onEdit, onChangeFeatureColor, onDelete } = props;
 
   useMapEvents({
     click() {
@@ -22,7 +22,9 @@ const DrawFeatureGroup = (props) => {
       },
     });
     e.layer.setStyle({
+      color: selectedColor,
       opacity: 0.8,
+      weight: e.layerType === "polyline" ? 4 : 1,
     });
     const newFeature = {
       id: e.layer._leaflet_id,
@@ -31,11 +33,16 @@ const DrawFeatureGroup = (props) => {
     onCreate(newFeature);
   };
 
+  const onDrawStartHandler = () => {
+    setSelectedColor("#000");
+  };
+
   const onColorChangeCompleteHandler = (event) => {
     setSelectedColor(event.hex);
-    selectedFeature?.setStyle({
+    selectedFeature.setStyle({
       color: event.hex,
     });
+    onChangeFeatureColor(selectedFeature, event.hex);
   };
 
   const onEditHandler = (e) => {
@@ -57,7 +64,6 @@ const DrawFeatureGroup = (props) => {
     if (featureGroup === null) {
       return;
     }
-
     onUpdateFeatureGroup(featureGroup);
   };
 
@@ -68,6 +74,7 @@ const DrawFeatureGroup = (props) => {
       }}>
       <EditControl
         position="topright"
+        onDrawStart={onDrawStartHandler}
         onCreated={onCreateHandler}
         onEdited={onEditHandler}
         onDeleted={onDeleteHandler}
