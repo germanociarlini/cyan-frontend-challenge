@@ -20,18 +20,15 @@ const SaveModalContent = (props) => {
       </header>
       <main>
         <input type="text" onChange={(e) => onSaveNameChangeHandler(e.target.value)}></input>
-        {loadedCollection && <button
-          className="modal__select-button"
-          disabled={saveName.length === 0}
-          onClick={() => onSaveHandler(false)}
-        >
-          Overwrite...
-        </button>}
-        <button
-          className="modal__select-button"
-          disabled={saveName.length === 0}
-          onClick={() => onSaveHandler(true)}
-        >
+        {loadedCollection && (
+          <button
+            className="modal__select-button"
+            disabled={saveName.length === 0}
+            onClick={() => onSaveHandler(false)}>
+            Overwrite...
+          </button>
+        )}
+        <button className="modal__select-button" disabled={saveName.length === 0} onClick={() => onSaveHandler(true)}>
           Save as...
         </button>
       </main>

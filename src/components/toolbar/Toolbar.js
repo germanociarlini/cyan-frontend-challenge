@@ -24,9 +24,7 @@ const Toolbar = (props) => {
 
   const onSaveHandler = async (saveName, isSaveAs) => {
     const upsertCollection = async (shouldCreateNewCollection) => {
-      const endpoint = shouldCreateNewCollection
-        ? "/collections"
-        : `/collections/${loadedCollection.id}`;
+      const endpoint = shouldCreateNewCollection ? "/collections" : `/collections/${loadedCollection.id}`;
       const collection = await api.put(endpoint, { name: saveName });
       return collection.data;
     };
@@ -56,9 +54,7 @@ const Toolbar = (props) => {
   };
 
   const onLoadHandler = async (loadedCollection) => {
-    const collectionFeatures = await api.get(
-      `/collections/${loadedCollection.id}/features`
-    );
+    const collectionFeatures = await api.get(`/collections/${loadedCollection.id}/features`);
     const validGeoJson = {
       type: "FeatureCollection",
       features: collectionFeatures.data.map((feature) => {
@@ -84,10 +80,7 @@ const Toolbar = (props) => {
         onRequestClose={() => onSetActiveModalHandler(null)}
         style={{ overlay: { zIndex: 1001 }, content: { zIndex: 1001 } }} // compensate for leaflet z-index
       >
-        <SaveModalContent
-          loadedCollection={loadedCollection}
-          onSave={onSaveHandler}
-        />
+        <SaveModalContent loadedCollection={loadedCollection} onSave={onSaveHandler} />
       </Modal>
       <Modal
         isOpen={activeModal === "load-modal"}

@@ -17,11 +17,7 @@ const LoadModal = (props) => {
     <div>
       <header className="modal__header">
         <h2>Load Feature Collection</h2>
-        <button
-          className="modal__select-button"
-          onClick={onLoadHandler}
-          disabled={selectedCollection === null}
-        >
+        <button className="modal__select-button" onClick={onLoadHandler} disabled={selectedCollection === null}>
           Load Collection
         </button>
       </header>
@@ -29,12 +25,9 @@ const LoadModal = (props) => {
         {collections.map((collection) => {
           return (
             <div
-              className={`modal__collection-item ${
-                collection === selectedCollection ? "selected" : ""
-              }`}
+              className={`modal__collection-item ${collection === selectedCollection ? "selected" : ""}`}
               onClick={() => onSelectedCollectionHandler(collection)}
-              key={collection.id}
-            >
+              key={collection.id}>
               <span>{collection.name}</span>
               <span>{collection.updatedAt.toLocaleString("default")}</span>
             </div>

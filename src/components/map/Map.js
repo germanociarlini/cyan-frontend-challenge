@@ -8,13 +8,12 @@ import "./Map.css";
 const Map = () => {
   const initialPosition = [-3.731862, -38.526669];
   const [loadedCollection, setLoadedCollection] = useState(null);
-  const [features, setFeatures] = useState([]);
   const [editableFeatureGroup, setEditableFeatureGroup] = useState(null);
+  const [features, setFeatures] = useState([]);
 
-  //#region Toolbar Handlers
-    const onSaveHandler = async (collection) => {
-      setLoadedCollection(collection);
-    };
+  const onSaveHandler = async (collection) => {
+    setLoadedCollection(collection);
+  };
 
   const onLoadHandler = (loadedCollection, geoJson) => {
     onClearHandler();
@@ -37,9 +36,7 @@ const Map = () => {
     editableFeatureGroup.clearLayers();
     setFeatures([]);
   };
-  //#endregion
 
-  //#region Draw Event Handlers
   const onUpdateFeatureGroupHandler = (featureGroup) => {
     setEditableFeatureGroup(featureGroup);
   };
@@ -59,13 +56,9 @@ const Map = () => {
 
   const onDeleteHandler = (deletedFeaturesIds) => {
     setFeatures((previousFeatures) =>
-      previousFeatures.filter(
-        (feature) =>
-          !deletedFeaturesIds.some((deletedId) => +deletedId === feature.id)
-      )
+      previousFeatures.filter((feature) => !deletedFeaturesIds.some((deletedId) => +deletedId === feature.id))
     );
   };
-  //#endregion
 
   return (
     <>

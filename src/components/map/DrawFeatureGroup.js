@@ -1,15 +1,41 @@
-import { FeatureGroup } from "react-leaflet";
+import { useState } from "react";
+import { TwitterPicker } from "react-color";
+import { FeatureGroup, Popup, useMapEvents } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 
 const DrawFeatureGroup = (props) => {
+  const [selectedFeature, setSelectedFeature] = useState(null);
+  const [selectedColor, setSelectedColor] = useState("#fff");
+
   const { onUpdateFeatureGroup, onCreate, onEdit, onDelete } = props;
 
+  useMapEvents({
+    click() {
+      setSelectedFeature(null);
+    },
+  });
+
   const onCreateHandler = (e) => {
+    e.layer.on({
+      click(e) {
+        setSelectedFeature(e.target);
+      },
+    });
+    e.layer.setStyle({
+      opacity: 0.8,
+    });
     const newFeature = {
       id: e.layer._leaflet_id,
       feature: e.layer.toGeoJSON(),
     };
     onCreate(newFeature);
+  };
+
+  const onColorChangeCompleteHandler = (event) => {
+    setSelectedColor(event.hex);
+    selectedFeature?.setStyle({
+      color: event.hex,
+    });
   };
 
   const onEditHandler = (e) => {
@@ -39,8 +65,7 @@ const DrawFeatureGroup = (props) => {
     <FeatureGroup
       ref={(featureGroupRef) => {
         _onFeatureGroupReady(featureGroupRef);
-      }}
-    >
+      }}>
       <EditControl
         position="topright"
         onCreated={onCreateHandler}
@@ -52,6 +77,9 @@ const DrawFeatureGroup = (props) => {
           circle: false,
         }}
       />
+      <Popup>
+        <TwitterPicker triangle="hide" color={selectedColor} onChangeComplete={onColorChangeCompleteHandler} />
+      </Popup>
     </FeatureGroup>
   );
 };
