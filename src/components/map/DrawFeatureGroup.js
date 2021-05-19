@@ -23,7 +23,7 @@ const DrawFeatureGroup = (props) => {
     });
     e.layer.setStyle({
       color: selectedColor,
-      opacity: 0.8,
+      opacity: 0.9,
       weight: e.layerType === "polyline" ? 4 : 1,
     });
     const newFeature = {

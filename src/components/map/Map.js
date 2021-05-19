@@ -18,7 +18,11 @@ const Map = () => {
   const onLoadHandler = (loadedCollection, geoJson) => {
     onClearHandler();
 
-    const leafletGeoJSON = new L.GeoJSON(geoJson);
+    const leafletGeoJSON = new L.GeoJSON(geoJson, {
+      style: (feature) => {
+        return { color: feature.properties.color };
+      },
+    });
     const leafletFG = editableFeatureGroup;
 
     leafletGeoJSON.eachLayer((layer) => {

@@ -61,7 +61,7 @@ const Toolbar = (props) => {
         return {
           type: "Feature",
           properties: {
-            fill: feature.color,
+            color: feature.properties.color,
           },
           geometry: feature.geometry,
         };
