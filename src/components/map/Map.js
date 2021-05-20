@@ -16,7 +16,8 @@ const Map = () => {
   };
 
   const onLoadHandler = (loadedCollection, geoJson) => {
-    onClearHandler();
+    editableFeatureGroup?.clearLayers();
+    setFeatures([]);
 
     const leafletGeoJSON = new L.GeoJSON(geoJson, {
       style: (feature) => {
@@ -34,11 +35,6 @@ const Map = () => {
     });
 
     setLoadedCollection(loadedCollection);
-  };
-
-  const onClearHandler = () => {
-    editableFeatureGroup.clearLayers();
-    setFeatures([]);
   };
 
   const onUpdateFeatureGroupHandler = (featureGroup) => {
@@ -78,7 +74,6 @@ const Map = () => {
         features={features}
         onSave={onSaveHandler}
         onLoad={onLoadHandler}
-        onClear={onClearHandler}
       />
       <MapContainer center={initialPosition} zoom={12} zoomControl={false}>
         <TileLayer
