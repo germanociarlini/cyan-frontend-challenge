@@ -1,8 +1,9 @@
-import { useState } from "react";
-import "./SaveModalContent.css";
+import { useContext, useState } from "react";
+import { CollectionContext } from "../../Contexts";
+import "./SaveModal.css";
 
-const SaveModalContent = (props) => {
-  const { loadedCollection, onSave } = props;
+const SaveModal = ({onSave}) => {
+  const { collection } = useContext(CollectionContext);
   const [saveName, setSaveName] = useState("");
 
   const onSaveHandler = (isSaveAsNewCollection) => {
@@ -20,7 +21,7 @@ const SaveModalContent = (props) => {
       </header>
       <main>
         <input type="text" onChange={(e) => onSaveNameChangeHandler(e.target.value)}></input>
-        {loadedCollection && (
+        {collection && (
           <button
             className="modal__select-button"
             disabled={saveName.length === 0}
@@ -28,7 +29,10 @@ const SaveModalContent = (props) => {
             Overwrite...
           </button>
         )}
-        <button className="modal__select-button" disabled={saveName.length === 0} onClick={() => onSaveHandler(true)}>
+        <button
+          className="modal__select-button"
+          disabled={saveName.length === 0}
+          onClick={() => onSaveHandler(true)}>
           Save as...
         </button>
       </main>
@@ -36,4 +40,4 @@ const SaveModalContent = (props) => {
   );
 };
 
-export default SaveModalContent;
+export default SaveModal;
