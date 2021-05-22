@@ -20,7 +20,7 @@ const featureStyles = {
   },
 };
 
-const FeatureController = ({ onCreate, onEdit, onColorChange, onDelete }) => {
+const FeatureController = ({ onCreate, onEdit, onDelete }) => {
   const [selectedFeature, setSelectedFeature] = useState(null);
   const [editableFeatureGroup, setEditableFeatureGroup] = useState(null);
   const [selectedColor, setSelectedColor] = useState(featureStyles.defaultStyle.color);
@@ -29,7 +29,7 @@ const FeatureController = ({ onCreate, onEdit, onColorChange, onDelete }) => {
 
   useMapEvents({
     click() {
-      setSelectedFeature(null);
+      setSelectedFeature(null); // reset the selected layer when clicking elsewhere
     },
   });
 
@@ -41,8 +41,12 @@ const FeatureController = ({ onCreate, onEdit, onColorChange, onDelete }) => {
       const collectionGeoJson = await buildCollectionGeoJson(collection);
       const leafletGeoJson = new L.GeoJSON(collectionGeoJson, {
         style: (feature) => {
-          const color = feature.properties.color ? feature.properties.color : featureStyles.defaultStyle.color
-          return { color };
+          return {
+            color: feature.properties.color,
+            opacity: feature.properties.opacity,
+            fillOpacity: feature.properties.fillOpacity,
+            weight: feature.properties.weight,
+          };
         },
       });
       leafletGeoJson.eachLayer((layer) => {
@@ -54,11 +58,12 @@ const FeatureController = ({ onCreate, onEdit, onColorChange, onDelete }) => {
       loadCollection(collection);
     }
     onCreate(collectionFeatures);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collection]);
 
   const onFeatureGroupReady = (featureGroup) => {
     if (featureGroup === null) {
-      return;
+      return; // recommended by react-leaflet-draw docs
     }
     setEditableFeatureGroup(featureGroup);
   };
@@ -70,19 +75,18 @@ const FeatureController = ({ onCreate, onEdit, onColorChange, onDelete }) => {
     onCreate([newFeature]);
   };
 
-  const onColorChangeHandler = (event) => {
-    selectedFeature.setStyle({
-      color: event.hex,
-    });
-    setSelectedColor(event.hex);
-    onColorChange(selectedFeature, event.hex);
-  };
-
   const onEditFeaturesHandler = (e) => {
     const editedFeatures = Object.values(e.layers._layers).map((layer) =>
       extractFeatureDataFromLayer(layer)
     );
     onEdit(editedFeatures);
+  };
+
+  const onColorChangeHandler = (event) => {
+    selectedFeature.setStyle({ color: event.hex });
+    selectedFeature.properties.color = event.hex;
+    setSelectedColor(event.hex);
+    onEdit([selectedFeature]);
   };
 
   const onDeleteFeaturesHandler = (e) => {

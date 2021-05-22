@@ -13,11 +13,11 @@ const mapSettings = {
 const Map = () => {
   const { features, setFeatures } = useContext(FeaturesContext);
 
-  const onFeaturesCreatedHandler = (newFeatures) => {
-    setFeatures(previousFeatures => [...previousFeatures, ...newFeatures]);
+  const onCreateFeaturesHandler = (newFeatures) => {
+    setFeatures((previousFeatures) => [...previousFeatures, ...newFeatures]);
   };
 
-  const onFeaturesEditedHandler = (editedFeatures) => {
+  const onEditFeaturesHandler = (editedFeatures) => {
     const updatedFeatures = features.map((oldFeature) => {
       const updatedFeature = editedFeatures.find(
         (editedFeature) => editedFeature.id === oldFeature.id
@@ -27,15 +27,15 @@ const Map = () => {
     setFeatures(updatedFeatures);
   };
 
-  const onFeatureColorChangeHandler = (editedFeature, color) => {
-    const layer = features.find((feature) => feature.id === editedFeature._leaflet_id);
-    if (layer) {
-      layer.feature.properties["color"] = color;
-    }
-    onFeaturesEditedHandler([layer]);
-  };
+  // const onChangeFeatureColorHandler = (editedFeature, color) => {
+  //   const feature = features.find((feature) => feature.id === editedFeature._leaflet_id);
+  //   if (feature) {
+  //     feature.feature.properties["color"] = color;
+  //   }
+  //   onFeaturesEditedHandler([layer]);
+  // };
 
-  const onFeaturesDeletedHandler = (deletedIds) => {
+  const onDeleteFeaturesHandler = (deletedIds) => {
     const wasDeleted = (feature) => !deletedIds.some((deletedId) => deletedId === feature.id);
     setFeatures(features.filter((feature) => wasDeleted(feature)));
   };
@@ -53,10 +53,10 @@ const Map = () => {
       <ZoomControl position="bottomleft" />
 
       <FeatureControls
-        onCreate={(newFeatures) => onFeaturesCreatedHandler(newFeatures)}
-        onEdit={(editedFeatures) => onFeaturesEditedHandler(editedFeatures)}
-        onColorChange={(editedFeature, color) => onFeatureColorChangeHandler(editedFeature, color)}
-        onDelete={(deletedFeatures) => onFeaturesDeletedHandler(deletedFeatures)}
+        onCreate={(newFeatures) => onCreateFeaturesHandler(newFeatures)}
+        onEdit={(editedFeatures) => onEditFeaturesHandler(editedFeatures)}
+        // onColorChange={(editedFeature, color) => onChangeFeatureColorHandler(editedFeature, color)}
+        onDelete={(deletedFeatures) => onDeleteFeaturesHandler(deletedFeatures)}
       />
     </MapContainer>
   );

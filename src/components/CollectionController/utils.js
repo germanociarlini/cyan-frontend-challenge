@@ -5,8 +5,8 @@ export const saveNewCollection = async (saveName) => {
   return newCollection.data;
 };
 
-export const overwriteCollection = async (saveName, collectionToOverwrite) => {
-  const endpoint = `/collections/${collectionToOverwrite.id}`;
+export const updateCollection = async (saveName, collectionToUpdate) => {
+  const endpoint = `/collections/${collectionToUpdate.id}`;
   const payload = { name: saveName };
   const updatedCollection = await api.put(endpoint, payload);
   return updatedCollection;

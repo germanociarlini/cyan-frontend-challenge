@@ -6,7 +6,7 @@ import { CollectionContext, FeaturesContext } from "../Contexts";
 import "./CollectionController.css";
 import LoadModal from "./LoadModal";
 import SaveModal from "./SaveModal";
-import { saveFeatures, saveNewCollection } from "./utils";
+import { saveFeatures, saveNewCollection, updateCollection } from "./utils";
 
 Modal.setAppElement(document.getElementById("root"));
 
@@ -21,29 +21,29 @@ const CollectionController = () => {
     onSaveCollection(newCollection);
   };
 
-  const onOverwriteHandler = (saveName, collectionToOverwrite) => {
-    const updatedCollection = await updatedCollection(saveName, collectionToOverwrite);
+  const onOverwriteHandler = async (saveName, collectionToOverwrite) => {
+    const updatedCollection = await updateCollection(saveName, collectionToOverwrite);
     onSaveCollection(updatedCollection);
   };
 
-  const onSaveCollection = (upsertedCollection) => {
+  const onSaveCollection = async (upsertedCollection) => {
     const putFeaturesResult = await saveFeatures(upsertedCollection.id, features);
     if (putFeaturesResult) {
       setActiveModal(null);
-      setCollection(storedCollection);
+      setCollection(upsertedCollection);
     }
   };
   //#endregion
 
   //#region Load Handlers
-  const onLoadHandler = async (collection) => {
+  const onLoadHandler = async (loadedCollection) => {
     setActiveModal(null);
-    setCollection(collection);
+    setCollection(loadedCollection);
   };
   //#endregion
 
   const saveModal = <SaveModal onSaveAs={onSaveAsHandler} onOverwrite={onOverwriteHandler} />;
-  const loadModal = <LoadModal onLoad={(collection) => onLoadHandler(collection)} />;
+  const loadModal = <LoadModal onLoad={(loadedCollection) => onLoadHandler(loadedCollection)} />;
 
   return (
     <div className="collection-controller">

@@ -1,14 +1,16 @@
 import api from "../../../services/api";
 
 export const initializeFeature = (layer, style, onSelected) => {
-  layer.setStyle(style);
   layer.on({
     click(e) {
       onSelected(e.target);
     },
   });
 
-  return extractFeatureDataFromLayer(layer);
+  const newFeature = extractFeatureDataFromLayer(layer);
+  setFeatureStyle(newFeature, style);
+
+  return newFeature;
 };
 
 export const extractFeatureDataFromLayer = (layer) => {
@@ -16,8 +18,17 @@ export const extractFeatureDataFromLayer = (layer) => {
     id: layer._leaflet_id,
     feature: layer.toGeoJSON(),
   };
-
   return newFeature;
+};
+
+export const setFeatureStyle = (feature, style) => {
+  feature.setStyle(style);
+  feature.feature.properties = {
+    color: style.color,
+    opacity: style.opacity,
+    fillOpacity: style.fillOpacity,
+    weight: style.weight,
+  };
 };
 
 export const buildCollectionGeoJson = async (collection) => {
