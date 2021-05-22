@@ -6,30 +6,43 @@ import { CollectionContext, FeaturesContext } from "../Contexts";
 import "./CollectionController.css";
 import LoadModal from "./LoadModal";
 import SaveModal from "./SaveModal";
-import { putFeatures, upsertCollection } from "./utils";
+import { saveFeatures, saveNewCollection } from "./utils";
 
 Modal.setAppElement(document.getElementById("root"));
 
 const CollectionController = () => {
   const [activeModal, setActiveModal] = useState(null);
-  const { collection, setCollection } = useContext(CollectionContext);
+  const { setCollection } = useContext(CollectionContext);
   const { features } = useContext(FeaturesContext);
 
-  const onSaveHandler = async (saveName, isSaveAs) => {
-    const collectionToSave = await upsertCollection(saveName, (isSaveAs || !collection), collection);
-    const result = await putFeatures(collectionToSave.id, features);
-    if (result) {
-      setActiveModal(null);
-      setCollection(collectionToSave);
-    }
+  //#region Save Handlers
+  const onSaveAsHandler = async (saveName) => {
+    const newCollection = await saveNewCollection(saveName);
+    onSaveCollection(newCollection);
   };
 
+  const onOverwriteHandler = (saveName, collectionToOverwrite) => {
+    const updatedCollection = await updatedCollection(saveName, collectionToOverwrite);
+    onSaveCollection(updatedCollection);
+  };
+
+  const onSaveCollection = (upsertedCollection) => {
+    const putFeaturesResult = await saveFeatures(upsertedCollection.id, features);
+    if (putFeaturesResult) {
+      setActiveModal(null);
+      setCollection(storedCollection);
+    }
+  };
+  //#endregion
+
+  //#region Load Handlers
   const onLoadHandler = async (collection) => {
     setActiveModal(null);
     setCollection(collection);
   };
+  //#endregion
 
-  const saveModal = <SaveModal onSave={onSaveHandler} />;
+  const saveModal = <SaveModal onSaveAs={onSaveAsHandler} onOverwrite={onOverwriteHandler} />;
   const loadModal = <LoadModal onLoad={(collection) => onLoadHandler(collection)} />;
 
   return (

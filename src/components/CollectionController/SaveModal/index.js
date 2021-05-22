@@ -2,16 +2,20 @@ import { useContext, useState } from "react";
 import { CollectionContext } from "../../Contexts";
 import "./SaveModal.css";
 
-const SaveModal = ({onSave}) => {
+const SaveModal = ({ onSaveAs, onOverwrite }) => {
   const { collection } = useContext(CollectionContext);
   const [saveName, setSaveName] = useState("");
 
-  const onSaveHandler = (isSaveAsNewCollection) => {
-    onSave(saveName, isSaveAsNewCollection);
-  };
-
   const onSaveNameChangeHandler = (text) => {
     setSaveName(text);
+  };
+
+  const onSaveAsHandler = () => {
+    onSaveAs(saveName);
+  };
+
+  const onOverwriteHandler = () => {
+    onOverwrite(saveName, collection);
   };
 
   return (
@@ -25,14 +29,14 @@ const SaveModal = ({onSave}) => {
           <button
             className="modal__select-button"
             disabled={saveName.length === 0}
-            onClick={() => onSaveHandler(false)}>
+            onClick={onOverwriteHandler}>
             Overwrite...
           </button>
         )}
         <button
           className="modal__select-button"
           disabled={saveName.length === 0}
-          onClick={() => onSaveHandler(true)}>
+          onClick={onSaveAsHandler}>
           Save as...
         </button>
       </main>
