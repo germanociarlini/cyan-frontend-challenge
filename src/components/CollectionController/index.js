@@ -17,7 +17,6 @@ const CollectionController = () => {
   const { setCollection } = useContext(CollectionContext);
   const { layers } = useContext(LayersContext);
 
-  //#region Save Handlers
   const onSaveAsHandler = async (saveName) => {
     const newCollection = await saveNewCollection(saveName);
     onSaveCollection(newCollection);
@@ -38,14 +37,11 @@ const CollectionController = () => {
       // show error toast
     }
   };
-  //#endregion
 
-  //#region Load Handlers
   const onLoadHandler = async (loadedCollection) => {
     setActiveModal(null);
     setCollection(loadedCollection);
   };
-  //#endregion
 
   const saveModal = <SaveModal onSaveAs={onSaveAsHandler} onOverwrite={onOverwriteHandler} />;
   const loadModal = <LoadModal onLoad={(loadedCollection) => onLoadHandler(loadedCollection)} />;

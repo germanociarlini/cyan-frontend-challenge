@@ -1,4 +1,10 @@
-.modal__collection-item {
+.load-modal__content {
+  display: grid;
+  grid-template-rows: 15% 70% 15%;
+  height: 100%;
+}
+
+main > .load-modal__collection-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -6,12 +12,21 @@
   margin-bottom: 0.2rem;
   cursor: pointer;
   font-size: 1.2rem;
+  transition: background-color 0.1s linear;
 }
 
-.modal__collection-item:hover {
-  background-color: rgba(0, 0, 0, 0.2);
+main > .load-modal__collection-item:hover {
+  background-color: #5b86fd;
 }
 
-.selected {
-  background-color: rgba(0, 0, 0, 0.1);
+main > .selected {
+  background-color: #3369ff;
+}
+
+@media screen and (max-width: 600px) {
+  .load-modal__collection-item {
+    flex-direction: column;
+    text-align: center;
+    font-size: 1rem;
+  }
 }

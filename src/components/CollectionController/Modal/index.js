@@ -5,6 +5,7 @@ import Modal from "react-modal";
 const BaseModal = ({ isOpen, onRequestClose, content }) => {
   return (
     <Modal
+      className="modal__content"
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       style={{ overlay: { zIndex: 1001 }, content: { zIndex: 1001 } }}>

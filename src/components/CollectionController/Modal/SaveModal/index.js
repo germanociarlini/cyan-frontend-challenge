@@ -8,7 +8,7 @@ const SaveModal = ({ onSaveAs, onOverwrite }) => {
   const [saveName, setSaveName] = useState("");
 
   useEffect(() => {
-    setSaveName((collection ? collection.name : ''));
+    setSaveName(collection ? collection.name : "");
   }, [collection]);
 
   const onSaveNameChangeHandler = (text) => {
@@ -25,11 +25,14 @@ const SaveModal = ({ onSaveAs, onOverwrite }) => {
 
   return (
     <div>
-      <header className="modal__header">
+      <header>
         <h2>Save Feature Collection</h2>
       </header>
       <main>
-        <input type="text" value={saveName} onChange={(e) => onSaveNameChangeHandler(e.target.value)}></input>
+        <input
+          type="text"
+          value={saveName}
+          onChange={(e) => onSaveNameChangeHandler(e.target.value)}></input>
         {collection && (
           <button
             className="modal__button"

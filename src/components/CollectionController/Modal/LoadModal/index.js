@@ -31,24 +31,19 @@ const LoadModal = ({ onLoad }) => {
   };
 
   return (
-    <div>
+    <div className="load-modal__content">
       <header className="modal__header">
         <h2>Load Feature Collection</h2>
-        <button
-          className="modal__button"
-          onClick={onLoadHandler}
-          disabled={selectedCollection === null}>
-          Load Collection
-        </button>
       </header>
       <main>
         {collections.map((collection) => {
           return (
             <div
-              className={`modal__collection-item ${
+              className={`load-modal__collection-item ${
                 collection === selectedCollection ? "selected" : ""
               }`}
               onClick={() => onSelectedCollectionHandler(collection)}
+              onDoubleClick={onLoadHandler}
               key={collection.id}>
               <span>{collection.name}</span>
               <span>{collection.updatedAt.toLocaleString("default")}</span>
@@ -56,6 +51,14 @@ const LoadModal = ({ onLoad }) => {
           );
         })}
       </main>
+      <footer>
+        <button
+          className="modal__button"
+          onClick={onLoadHandler}
+          disabled={selectedCollection === null}>
+          Load Collection
+        </button>
+      </footer>
     </div>
   );
 };
