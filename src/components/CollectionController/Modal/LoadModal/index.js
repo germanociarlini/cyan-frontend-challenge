@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import api from "../../../services/api";
+import api from "../../../../services/api";
+import "../Modal.css";
 import "./LoadModal.css";
 
 const LoadModal = ({ onLoad }) => {
@@ -34,7 +35,7 @@ const LoadModal = ({ onLoad }) => {
       <header className="modal__header">
         <h2>Load Feature Collection</h2>
         <button
-          className="modal__select-button"
+          className="modal__button"
           onClick={onLoadHandler}
           disabled={selectedCollection === null}>
           Load Collection

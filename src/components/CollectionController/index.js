@@ -5,8 +5,9 @@ import Modal from "react-modal";
 import { CollectionContext, LayersContext } from "../Contexts";
 import { extractLayerGeoJson } from "../Map/LayersController/utils";
 import "./CollectionController.css";
-import LoadModal from "./LoadModal";
-import SaveModal from "./SaveModal";
+import BaseModal from "./Modal";
+import LoadModal from "./Modal/LoadModal";
+import SaveModal from "./Modal/SaveModal";
 import { saveFeatures, saveNewCollection, updateCollection } from "./utils";
 
 Modal.setAppElement(document.getElementById("root"));
@@ -57,12 +58,11 @@ const CollectionController = () => {
       <div className="toolbar-button" onClick={() => setActiveModal(loadModal)}>
         <FontAwesomeIcon icon={faFolderOpen} />
       </div>
-      <Modal
+      <BaseModal
         isOpen={activeModal !== null}
         onRequestClose={() => setActiveModal(null)}
-        style={{ overlay: { zIndex: 1001 }, content: { zIndex: 1001 } }}>
-        {activeModal}
-      </Modal>
+        content={activeModal}
+      />
     </div>
   );
 };

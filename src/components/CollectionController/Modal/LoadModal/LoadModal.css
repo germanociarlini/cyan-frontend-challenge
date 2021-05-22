@@ -1,0 +1,17 @@
+.modal__collection-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  margin-bottom: 0.2rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.modal__collection-item:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
