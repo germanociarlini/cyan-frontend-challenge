@@ -24,15 +24,20 @@ const SaveModal = ({ onSaveAs, onOverwrite }) => {
   };
 
   return (
-    <div>
+    <div className="save-modal__content">
       <header>
         <h2>Save Feature Collection</h2>
       </header>
       <main>
         <input
+          className="save-modal__input"
           type="text"
           value={saveName}
+          placeholder="MyCollection..."
+          autoFocus={true}
           onChange={(e) => onSaveNameChangeHandler(e.target.value)}></input>
+      </main>
+      <footer>
         {collection && (
           <button
             className="modal__button"
@@ -47,7 +52,7 @@ const SaveModal = ({ onSaveAs, onOverwrite }) => {
           onClick={onSaveAsHandler}>
           Save as...
         </button>
-      </main>
+      </footer>
     </div>
   );
 };

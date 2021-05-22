@@ -35,7 +35,7 @@ const LoadModal = ({ onLoad }) => {
       <header className="modal__header">
         <h2>Load Feature Collection</h2>
       </header>
-      <main>
+      <main className="load-modal__collection-list">
         {collections.map((collection) => {
           return (
             <div

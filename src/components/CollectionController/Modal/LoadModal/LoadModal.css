@@ -4,7 +4,13 @@
   height: 100%;
 }
 
-main > .load-modal__collection-item {
+.load-modal__collection-list {
+  overflow: auto;
+  border-radius: 0.15em;
+  box-shadow: 0 0 0 0.1em rgba(0, 0, 0, 0.14);
+}
+
+.load-modal__collection-list > .load-modal__collection-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,11 +21,11 @@ main > .load-modal__collection-item {
   transition: background-color 0.1s linear;
 }
 
-main > .load-modal__collection-item:hover {
+.load-modal__collection-list > .load-modal__collection-item:hover {
   background-color: #5b86fd;
 }
 
-main > .selected {
+.load-modal__collection-list > .selected {
   background-color: #3369ff;
 }
 
