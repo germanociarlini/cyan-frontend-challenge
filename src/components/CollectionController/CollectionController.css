@@ -1,44 +1,41 @@
-.collection-controller {
+.collection-controller__container {
+  display: block;
   position: fixed;
-  top: 12px;
-  left: 12px;
-  display: flex;
-  flex-direction: column;
-  z-index: 1000;
+  top: 10px;
+  left: 10px;
+  z-index: 1001;
   background-color: white;
-  border-radius: 4px;
-  box-shadow: 0px 0px 5px;
+  border-radius: 0.15em;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+  max-width: 75%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0 10px;
 }
 
-.toolbar-container > .toolbar-button {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+.collection-controller__editing-label {
+  font-size: 1.2em;
 }
 
-.toolbar-container > .toolbar-button:last-child {
-  border-bottom: none;
+.collection-controller_toolbar {
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
+  align-items: center;
+  height: 40px;
 }
 
-.toolbar-button {
+.collection-controller_toolbar > .collection-controller_toolbar-button {
   display: grid;
   place-content: center;
+  background-color: white;
   width: 30px;
   height: 30px;
+  border-radius: 0.15em;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
-.toolbar-button:hover {
-  background-color: lightgrey;
-}
-
-.collection-label {
-  display: grid;
-  place-content: center;
-  position: absolute;
-  top: 12px;
-  left: 54px;
-  height: 30px;
-  padding: 0 5px;
-  z-index: 1001;
-  border-radius: 8px;
-  box-shadow: 0px 0px 5px;
-  background-color: white;
+.collection-controller_toolbar > .collection-controller_toolbar-button:hover {
+  background-color: lightgray;
 }

@@ -14,7 +14,7 @@ Modal.setAppElement(document.getElementById("root"));
 
 const CollectionController = () => {
   const [activeModal, setActiveModal] = useState(null);
-  const { setCollection } = useContext(CollectionContext);
+  const { collection, setCollection } = useContext(CollectionContext);
   const { layers } = useContext(LayersContext);
 
   const onSaveAsHandler = async (saveName) => {
@@ -45,20 +45,28 @@ const CollectionController = () => {
 
   const saveModal = <SaveModal onSaveAs={onSaveAsHandler} onOverwrite={onOverwriteHandler} />;
   const loadModal = <LoadModal onLoad={(loadedCollection) => onLoadHandler(loadedCollection)} />;
+  const collectionLabel = collection ? `Editing ${collection.name}` : "New Collection";
 
   return (
-    <div className="collection-controller">
-      <div className="toolbar-button" onClick={() => setActiveModal(saveModal)}>
-        <FontAwesomeIcon icon={faSave} />
+    <div className="collection-controller__container">
+      <span className="collection-controller__editing-label">{collectionLabel}</span>
+      <div className="collection-controller_toolbar">
+        <div
+          className="collection-controller_toolbar-button"
+          onClick={() => setActiveModal(saveModal)}>
+          <FontAwesomeIcon icon={faSave} />
+        </div>
+        <div
+          className="collection-controller_toolbar-button"
+          onClick={() => setActiveModal(loadModal)}>
+          <FontAwesomeIcon icon={faFolderOpen} />
+        </div>
+        <BaseModal
+          isOpen={activeModal !== null}
+          onRequestClose={() => setActiveModal(null)}
+          content={activeModal}
+        />
       </div>
-      <div className="toolbar-button" onClick={() => setActiveModal(loadModal)}>
-        <FontAwesomeIcon icon={faFolderOpen} />
-      </div>
-      <BaseModal
-        isOpen={activeModal !== null}
-        onRequestClose={() => setActiveModal(null)}
-        content={activeModal}
-      />
     </div>
   );
 };
