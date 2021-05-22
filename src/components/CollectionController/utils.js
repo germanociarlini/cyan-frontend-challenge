@@ -9,11 +9,10 @@ export const updateCollection = async (saveName, collectionToUpdate) => {
   const endpoint = `/collections/${collectionToUpdate.id}`;
   const payload = { name: saveName };
   const updatedCollection = await api.put(endpoint, payload);
-  return updatedCollection;
+  return updatedCollection.data;
 };
 
-export const saveFeatures = async (collectionId, features) => {
+export const saveFeatures = async (collectionId, collectionGeoJson) => {
   const endpoint = `/collections/${collectionId}/features`;
-  const payload = features.map((feature) => feature.feature);
-  return await api.put(endpoint, payload);
+  return await api.put(endpoint, collectionGeoJson);
 };

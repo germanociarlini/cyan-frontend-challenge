@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import CollectionController from "./components/CollectionController";
-import { CollectionContext, FeaturesContext } from "./components/Contexts";
+import { CollectionContext, LayersContext } from "./components/Contexts";
 import Map from "./components/Map";
 
 const App = () => {
   const [collection, setCollection] = useState(null);
-  const [features, setFeatures] = useState([]);
+  const [layers, setLayers] = useState([]);
 
   const collectionProviderValue = useMemo(
     () => ({
@@ -15,21 +15,21 @@ const App = () => {
     [collection, setCollection]
   );
 
-  const featuresProviderValue = useMemo(
+  const layersProviderValue = useMemo(
     () => ({
-      features,
-      setFeatures,
+      layers,
+      setLayers,
     }),
-    [features, setFeatures]
+    [layers, setLayers]
   );
 
   return (
     <div className="App">
       <CollectionContext.Provider value={collectionProviderValue}>
-        <FeaturesContext.Provider value={featuresProviderValue}>
+        <LayersContext.Provider value={layersProviderValue}>
           <CollectionController />
           <Map />
-        </FeaturesContext.Provider>
+        </LayersContext.Provider>
       </CollectionContext.Provider>
     </div>
   );

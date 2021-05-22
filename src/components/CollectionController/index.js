@@ -2,7 +2,8 @@ import { faFolderOpen, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
 import Modal from "react-modal";
-import { CollectionContext, FeaturesContext } from "../Contexts";
+import { CollectionContext, LayersContext } from "../Contexts";
+import { extractLayerGeoJson } from "../Map/LayersController/utils";
 import "./CollectionController.css";
 import LoadModal from "./LoadModal";
 import SaveModal from "./SaveModal";
@@ -13,7 +14,7 @@ Modal.setAppElement(document.getElementById("root"));
 const CollectionController = () => {
   const [activeModal, setActiveModal] = useState(null);
   const { setCollection } = useContext(CollectionContext);
-  const { features } = useContext(FeaturesContext);
+  const { layers } = useContext(LayersContext);
 
   //#region Save Handlers
   const onSaveAsHandler = async (saveName) => {
@@ -27,10 +28,13 @@ const CollectionController = () => {
   };
 
   const onSaveCollection = async (upsertedCollection) => {
-    const putFeaturesResult = await saveFeatures(upsertedCollection.id, features);
-    if (putFeaturesResult) {
+    const collectionGeoJson = layers.map((layer) => extractLayerGeoJson(layer));
+    const saveFeaturesResult = await saveFeatures(upsertedCollection.id, collectionGeoJson);
+    if (saveFeaturesResult) {
       setActiveModal(null);
       setCollection(upsertedCollection);
+    } else {
+      // show error toast
     }
   };
   //#endregion

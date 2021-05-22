@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
-import { FeaturesContext } from "../Contexts";
-import FeatureControls from "./FeatureController";
+import { LayersContext } from "../Contexts";
+import LayersController from "./LayersController";
 import "./Map.css";
 
 const mapSettings = {
@@ -11,33 +11,27 @@ const mapSettings = {
 };
 
 const Map = () => {
-  const { features, setFeatures } = useContext(FeaturesContext);
+  const { setLayers } = useContext(LayersContext);
 
-  const onCreateFeaturesHandler = (newFeatures) => {
-    setFeatures((previousFeatures) => [...previousFeatures, ...newFeatures]);
+  const onCreateLayerHandler = (newLayer) => {
+    setLayers((previousLayers) => [...previousLayers, newLayer]);
   };
 
-  const onEditFeaturesHandler = (editedFeatures) => {
-    const updatedFeatures = features.map((oldFeature) => {
-      const updatedFeature = editedFeatures.find(
-        (editedFeature) => editedFeature.id === oldFeature.id
-      );
-      return updatedFeature ? { ...updatedFeature } : { ...oldFeature };
-    });
-    setFeatures(updatedFeatures);
+  const onEditLayersHandler = (editedLayers) => {
+    setLayers((previousLayers) =>
+      previousLayers.map((pLayer) =>
+        Object.assign(
+          pLayer,
+          editedLayers.find((eLayer) => eLayer._leaflet_id === pLayer._leaflet_id)
+        )
+      )
+    );
   };
 
-  // const onChangeFeatureColorHandler = (editedFeature, color) => {
-  //   const feature = features.find((feature) => feature.id === editedFeature._leaflet_id);
-  //   if (feature) {
-  //     feature.feature.properties["color"] = color;
-  //   }
-  //   onFeaturesEditedHandler([layer]);
-  // };
-
-  const onDeleteFeaturesHandler = (deletedIds) => {
-    const wasDeleted = (feature) => !deletedIds.some((deletedId) => deletedId === feature.id);
-    setFeatures(features.filter((feature) => wasDeleted(feature)));
+  const onDeleteLayersHandler = (deletedIds) => {
+    setLayers((previousLayers) =>
+      previousLayers.filter((previousLayer) => !deletedIds.includes(previousLayer._leaflet_id))
+    );
   };
 
   return (
@@ -52,11 +46,10 @@ const Map = () => {
 
       <ZoomControl position="bottomleft" />
 
-      <FeatureControls
-        onCreate={(newFeatures) => onCreateFeaturesHandler(newFeatures)}
-        onEdit={(editedFeatures) => onEditFeaturesHandler(editedFeatures)}
-        // onColorChange={(editedFeature, color) => onChangeFeatureColorHandler(editedFeature, color)}
-        onDelete={(deletedFeatures) => onDeleteFeaturesHandler(deletedFeatures)}
+      <LayersController
+        onCreate={(newLayer) => onCreateLayerHandler(newLayer)}
+        onEdit={(editedLayers) => onEditLayersHandler(editedLayers)}
+        onDelete={(deletedLayers) => onDeleteLayersHandler(deletedLayers)}
       />
     </MapContainer>
   );
